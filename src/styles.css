@@ -1,5 +1,54 @@
 /* You can add global styles to this file, and also import other style files */
-@import "~@angular/material/prebuilt-themes/purple-green.css";
+@import "@angular/material/prebuilt-themes/pink-bluegrey.css";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+    height: 100%;
+    background-color: #464646;
+    font-size: 30px;
+    color: sandybrown;
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+*,::before,::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
+ul {
+    list-style-type: none;
+}
+
+input:focus, textarea:focus, select:focus, input {
+    outline: none;
+    border:none;
+}
+
+textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    box-shadow: 0 0 0px 1000px #ffffff inset !important;
+    -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+}
+
+*[ng-reflect-router-link]:focus {
+    outline: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: "color 9999s ease-out, background-color 9999s ease-out";
+    transition-delay: 9999s;
+}
