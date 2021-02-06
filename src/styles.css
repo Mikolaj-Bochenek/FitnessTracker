@@ -7,7 +7,7 @@ html, body {
     font-size: 30px;
     color: sandybrown;
     margin: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 *,::before,::after {
