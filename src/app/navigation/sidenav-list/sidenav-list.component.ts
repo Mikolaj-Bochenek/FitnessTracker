@@ -27,4 +27,9 @@ export class SidenavListComponent implements OnInit, OnDestroy {
   onCloseSidenav(): void {
     this.closeSidenav.emit();
   }
+
+  onLogout(): void {
+    this.authService.logout();
+    this.onCloseSidenav();
+  }
 }

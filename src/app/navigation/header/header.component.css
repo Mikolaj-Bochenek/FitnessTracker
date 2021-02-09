@@ -6,6 +6,7 @@ a {
 a:hover,
 a:active {
     color: lightgrey;
+    cursor: pointer;
 }
 
 .navigation-items {
