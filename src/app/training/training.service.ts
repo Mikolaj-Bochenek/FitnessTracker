@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Exercise } from './exercise.model';
 
+import { Subject } from 'rxjs/Subject';
+
 @Injectable({
   providedIn: 'root'
 })
 export class TrainingService {
+  exerciseChanged = new Subject<Exercise>();
+
   private availableExercises: Exercise[] = [
     { id: 'crunches', name: 'Crunches', duration: 30, calories: 8 },
     { id: 'touch-toes', name: 'Touch Toes', duration: 180, calories: 15 },
@@ -12,7 +16,41 @@ export class TrainingService {
     { id: 'burpees', name: 'Burpees', duration: 60, calories: 8 }
   ];
 
+  private runningExercise: Exercise;
+  private exercises: Exercise[] = [];
+
   getAvailableExercises(): Exercise[] {
     return this.availableExercises.slice();
+  }
+
+  getRunningExercise(): Exercise {
+    return { ...this.runningExercise };
+  }
+
+  startExercise(selectedId: string): void {
+    this.runningExercise = this.availableExercises.find(ex => ex.id === selectedId);
+    this.exerciseChanged.next({ ...this.runningExercise });
+  }
+
+  completeExercise(): void {
+    this.exercises.push({
+      ...this.runningExercise,
+      date: new Date(),
+      state: 'completed'
+    });
+    this.runningExercise = null;
+    this.exerciseChanged.next(null);
+  }
+
+  cancelExercise(progress: number): void {
+    this.exercises.push({
+      ...this.runningExercise,
+      date: new Date(),
+      state: 'cancelled',
+      duration: this.runningExercise.duration * (progress / 100),
+      calories: this.runningExercise.duration * (progress / 100)
+    });
+    this.runningExercise = null;
+    this.exerciseChanged.next(null);
   }
 }
