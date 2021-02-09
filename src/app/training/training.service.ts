@@ -27,6 +27,10 @@ export class TrainingService {
     return { ...this.runningExercise };
   }
 
+  getCompletedOrCancelledExercises(): Exercise[] {
+    return this.exercises.slice();
+  }
+
   startExercise(selectedId: string): void {
     this.runningExercise = this.availableExercises.find(ex => ex.id === selectedId);
     this.exerciseChanged.next({ ...this.runningExercise });
@@ -48,7 +52,7 @@ export class TrainingService {
       date: new Date(),
       state: 'cancelled',
       duration: this.runningExercise.duration * (progress / 100),
-      calories: this.runningExercise.duration * (progress / 100)
+      calories: this.runningExercise.calories * (progress / 100)
     });
     this.runningExercise = null;
     this.exerciseChanged.next(null);
