@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Exercise } from './exercise.model';
 
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/internal/operators/map';
 import { Subscription } from 'rxjs/Subscription';
