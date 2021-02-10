@@ -1,10 +1,12 @@
 # App URL
 
-https://fitnesstracker-c5f3f.web.app/login
+Services: https://fitnesstracker-c5f3f.web.app
+NgRx: https://fitnesstracker-c5f3f.web.app
+Akita: https://fitnesstracker-c5f3f.web.app
 
 # Tech Stack
 
-
+Angular, Angular Material, Angularfire (+ Firebase with Firestore)
 
 # FitnessTracker
 
