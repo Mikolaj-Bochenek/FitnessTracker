@@ -6,7 +6,8 @@ import { PastTrainingsComponent } from './past-trainings/past-trainings.componen
 import { SharedModule } from '../shared/shared.module';
 // import { StopTrainingComponent } from './current-training/stop-training.component';
 import { TrainingRoutingModule } from './training-routing.module';
-
+import { StoreModule } from '@ngrx/store';
+import { trainingReducer } from './state/training.reducer';
 
 
 @NgModule({
@@ -19,7 +20,10 @@ import { TrainingRoutingModule } from './training-routing.module';
   ],
   imports: [
     SharedModule,
-    TrainingRoutingModule
+    TrainingRoutingModule,
+
+    // This allow us to compose our application state from our feature module reducers.
+    StoreModule.forFeature('training', trainingReducer),
   ],
   // entryComponents: [StopTrainingComponent]
 })
