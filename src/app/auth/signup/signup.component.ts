@@ -12,7 +12,7 @@ import { getLoadingSelector } from '../../shared/state/index';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
-  maxDate;
+  maxDate: any;
   isLoading$: Observable<boolean>;
 
   constructor(

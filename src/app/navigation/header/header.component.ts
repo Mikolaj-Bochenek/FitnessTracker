@@ -1,5 +1,4 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Subscription } from 'rxjs/internal/Subscription';
 import { Store } from '@ngrx/store';
 import { AuthState } from '../../auth/state/ui.reducer';
 import { Observable } from 'rxjs';
@@ -14,7 +13,6 @@ import { AuthService } from '../../auth/auth.service';
 export class HeaderComponent implements OnInit {
   @Output() sidenavToggle = new EventEmitter<void>();
   isAuth$: Observable<boolean>;
-  authSub: Subscription;
 
   constructor(
     private store: Store<AuthState>,

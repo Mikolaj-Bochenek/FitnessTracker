@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, CanLoad, Route } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanLoad, Route } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
 import { getAuthSelector } from './state';
@@ -9,8 +9,7 @@ import { AuthState } from './state/ui.reducer';
 export class AuthGuard implements CanActivate, CanLoad {
 
   constructor(
-    private store: Store<AuthState>,
-    private router: Router) { }
+    private store: Store<AuthState>) { }
 
   // no longer used after lazy loading added.
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
