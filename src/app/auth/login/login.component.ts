@@ -1,10 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
-import { UIService } from '../../shared/ui.service';
-import { Subscription } from 'rxjs/Subscription';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 import { UIState } from '../../shared/state/ui.reducer';
 import { getLoadingSelector } from '../../shared/state/index';
 
@@ -13,26 +11,15 @@ import { getLoadingSelector } from '../../shared/state/index';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
   isLoading$: Observable<boolean>;
-  private loadingSub: Subscription;
 
   constructor(
     private authServie: AuthService,
-    // private uiService: UIService,
     private store: Store<UIState>) { }
 
   ngOnInit(): void {
     this.isLoading$ = this.store.select(getLoadingSelector);
-    // this.loadingSub = this.uiService.loadingStateChanged.subscribe(isLoading => {
-    //   this.isLoading = isLoading;
-    // });
-  }
-
-  ngOnDestroy(): void {
-    if (this.loadingSub) {
-      this.loadingSub.unsubscribe();
-    }
   }
 
   onSubmit(form: NgForm): void {
