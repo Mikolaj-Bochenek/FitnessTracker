@@ -20,7 +20,7 @@ export const SetFinishedTrainings = createAction(
 
 export const StartTraining = createAction(
   TrainingActionType.StartTraining,
-  props<{ exercise: Exercise }>()
+  props<{ selectedId: string }>()
 );
 
 export const StopTraining = createAction(

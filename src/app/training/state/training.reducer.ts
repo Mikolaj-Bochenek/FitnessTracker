@@ -36,7 +36,7 @@ export const trainingReducer = createReducer<TrainingState>(
   on(TrainingActions.StartTraining, (state, action): TrainingState => {
     return {
       ...state,
-      activeTraining: action.exercise
+      activeTraining: { ...state.availableExercises.find(ex => ex.id === action.selectedId) }
     };
   }),
   on(TrainingActions.StopTraining, (state): TrainingState => {

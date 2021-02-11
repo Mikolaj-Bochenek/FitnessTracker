@@ -7,8 +7,11 @@ import { map } from 'rxjs/internal/operators/map';
 import { Subscription } from 'rxjs/Subscription';
 import { UIService } from '../shared/ui.service';
 import { Store } from '@ngrx/store';
-import { UIState } from '../shared/state/ui.reducer';
 import * as UIActions from '../shared/state/ui.actions';
+import * as TrainingActions from './state/training.actions';
+import { State } from '../state/app.state';
+import { getActiveTrainingSelector } from './state/index';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -18,14 +21,12 @@ export class TrainingService {
   exercisesChanged = new Subject<Exercise[]>();
   finishedExercisesChanged = new Subject<Exercise[]>();
 
-  private runningExercise: Exercise;
-  private availableExercises: Exercise[] = [];
   private fireSubs: Subscription[] = [];
 
   constructor(
     private db: AngularFirestore,
     private uiService: UIService,
-    private store: Store<UIState>) { }
+    private store: Store<State>) { }
 
   fetchAvailableExercises(): void {
     this.store.dispatch(UIActions.StartLoading());
@@ -41,8 +42,7 @@ export class TrainingService {
         })
       ).subscribe((exercises: Exercise[]) => {
         this.store.dispatch(UIActions.StopLoading());
-        this.availableExercises = exercises;
-        this.exercisesChanged.next([...this.availableExercises]);
+        this.store.dispatch(TrainingActions.SetAvailableTrainings({ exercises }));
       }, () => {
         this.store.dispatch(UIActions.StopLoading());
         this.uiService.showSnackbar('Fetching exercises failed, lease try again later', null, 3000);
@@ -50,42 +50,38 @@ export class TrainingService {
       }));
   }
 
-  getRunningExercise(): Exercise {
-    return { ...this.runningExercise };
-  }
-
   fetchCompletedOrCancelledExercises(): void {
     this.fireSubs.push(this.db.collection('finishedExercises').valueChanges().subscribe((exercises: Exercise[]) => {
-      this.finishedExercisesChanged.next(exercises);
+      this.store.dispatch(TrainingActions.SetFinishedTrainings({ exercises }));
     }));
   }
 
   startExercise(selectedId: string): void {
-    // this.db.doc('availableExercises/' + selectedId).update({ lastSelected: new Date() });
-    this.runningExercise = this.availableExercises.find(ex => ex.id === selectedId);
-    this.exerciseChanged.next({ ...this.runningExercise });
+    this.store.dispatch(TrainingActions.StartTraining({ selectedId }));
   }
 
   completeExercise(): void {
-    this.addDataToDatabase({
-      ...this.runningExercise,
-      date: new Date(),
-      state: 'completed'
+    this.store.select(getActiveTrainingSelector).pipe(take(1)).subscribe(exercise => {
+      this.addDataToDatabase({
+        ...exercise,
+        date: new Date(),
+        state: 'completed'
+      });
+      this.store.dispatch(TrainingActions.StopTraining());
     });
-    this.runningExercise = null;
-    this.exerciseChanged.next(null);
   }
 
   cancelExercise(progress: number): void {
-    this.addDataToDatabase({
-      ...this.runningExercise,
-      date: new Date(),
-      state: 'cancelled',
-      duration: this.runningExercise.duration * (progress / 100),
-      calories: this.runningExercise.calories * (progress / 100)
+    this.store.select(getActiveTrainingSelector).pipe(take(1)).subscribe(exercise => {
+      this.addDataToDatabase({
+        ...exercise,
+        date: new Date(),
+        state: 'cancelled',
+        duration: exercise.duration * (progress / 100),
+        calories: exercise.calories * (progress / 100)
+      });
+      this.store.dispatch(TrainingActions.StopTraining());
     });
-    this.runningExercise = null;
-    this.exerciseChanged.next(null);
   }
 
   private addDataToDatabase(exercise: Exercise): void {
