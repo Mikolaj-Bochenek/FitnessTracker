@@ -3,6 +3,10 @@ import { NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { UIService } from '../../shared/ui.service';
 import { Subscription } from 'rxjs/Subscription';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { UIState } from '../../shared/state/ui.reducer';
+import { getLoadingSelector } from '../../shared/state/index';
 
 @Component({
   selector: 'app-login',
@@ -10,17 +14,19 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  isLoading = false;
+  isLoading$: Observable<boolean>;
   private loadingSub: Subscription;
 
   constructor(
     private authServie: AuthService,
-    private uiService: UIService) { }
+    // private uiService: UIService,
+    private store: Store<UIState>) { }
 
   ngOnInit(): void {
-    this.loadingSub = this.uiService.loadingStateChanged.subscribe(isLoading => {
-      this.isLoading = isLoading;
-    });
+    this.isLoading$ = this.store.select(getLoadingSelector);
+    // this.loadingSub = this.uiService.loadingStateChanged.subscribe(isLoading => {
+    //   this.isLoading = isLoading;
+    // });
   }
 
   ngOnDestroy(): void {
